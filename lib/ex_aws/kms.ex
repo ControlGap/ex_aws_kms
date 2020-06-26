@@ -248,7 +248,7 @@ defmodule ExAws.KMS do
         "Action" => "GenerateDataKeyWithoutPlaintext",
         "Version" => @version,
         "KeyId" => key_id,
-        "KeyPairSpec" => opts[:key_spec] || "RSA_2048"
+        "KeySpec" => opts[:key_spec] || "AES_256"
       })
 
     request(:generate_data_key_without_plaintext, query_params)
@@ -301,7 +301,7 @@ defmodule ExAws.KMS do
         "Action" => "GenerateDataKeyPairWithoutPlaintext",
         "Version" => @version,
         "KeyId" => key_id,
-        "KeySpec" => opts[:key_spec] || "AES_256"
+        "KeySpec" => opts[:key_pair_spec] || "RSA_2048"
       })
 
     request(:generate_data_key_pair_without_plaintext, query_params)
