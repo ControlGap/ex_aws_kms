@@ -248,7 +248,7 @@ defmodule ExAws.KMS do
         "Action" => "GenerateDataKeyWithoutPlaintext",
         "Version" => @version,
         "KeyId" => key_id,
-        "KeySpec" => opts[:key_spec] || "AES_256"
+        "KeyPairSpec" => opts[:key_spec] || "RSA_2048"
       })
 
     request(:generate_data_key_without_plaintext, query_params)
@@ -258,7 +258,7 @@ defmodule ExAws.KMS do
   @type generate_data_key_pair_opts :: [
           {:encryption_context, map}
           | {:grant_tokens, list(binary)}
-          | {:key_spec, binary}
+          | {:key_pair_spec, binary}
           | {:number_of_bytes, pos_integer}
         ]
   @spec generate_data_key_pair(key_id :: binary) :: ExAws.Operation.JSON.t()
@@ -274,8 +274,8 @@ defmodule ExAws.KMS do
         "KeyId" => key_id
       })
 
-    if !Map.has_key?(query_params, "KeySpec") and !Map.has_key?(query_params, "NumberOfBytes") do
-      request(:generate_data_key_pair, Map.put(query_params, "KeySpec", "AES_256"))
+    if !Map.has_key?(query_params, "KeyPairSpec") and !Map.has_key?(query_params, "NumberOfBytes") do
+      request(:generate_data_key_pair, Map.put(query_params, "KeyPairSpec", "RSA_2048"))
     else
       request(:generate_data_key_pair, query_params)
     end
@@ -285,7 +285,7 @@ defmodule ExAws.KMS do
   @type generate_data_key_pair_without_plaintext_opts :: [
           {:encryption_context, map}
           | {:grant_tokens, list(binary)}
-          | {:key_spec, binary}
+          | {:key_pair_spec, binary}
           | {:number_of_bytes, pos_integer}
         ]
   @spec generate_data_key_pair_without_plaintext(key_id :: binary) :: ExAws.Operation.JSON.t()
