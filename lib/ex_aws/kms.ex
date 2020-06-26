@@ -254,6 +254,59 @@ defmodule ExAws.KMS do
     request(:generate_data_key_without_plaintext, query_params)
   end
 
+  @doc "Generate a data key pair"
+  @type generate_data_key_pair_opts :: [
+          {:encryption_context, map}
+          | {:grant_tokens, list(binary)}
+          | {:key_spec, binary}
+          | {:number_of_bytes, pos_integer}
+        ]
+  @spec generate_data_key_pair(key_id :: binary) :: ExAws.Operation.JSON.t()
+  @spec generate_data_key_pair(key_id :: binary, opts :: generate_data_key_opts) ::
+          ExAws.Operation.JSON.t()
+  def generate_data_key_pair(key_id, opts \\ []) when is_list(opts) do
+    query_params =
+      opts
+      |> normalize_opts
+      |> Map.merge(%{
+        "Action" => "GenerateDataKeyPair",
+        "Version" => @version,
+        "KeyId" => key_id
+      })
+
+    if !Map.has_key?(query_params, "KeySpec") and !Map.has_key?(query_params, "NumberOfBytes") do
+      request(:generate_data_key_pair, Map.put(query_params, "KeySpec", "AES_256"))
+    else
+      request(:generate_data_key_pair, query_params)
+    end
+  end
+
+  @doc "Generate a data key pair without plaintext"
+  @type generate_data_key_pair_without_plaintext_opts :: [
+          {:encryption_context, map}
+          | {:grant_tokens, list(binary)}
+          | {:key_spec, binary}
+          | {:number_of_bytes, pos_integer}
+        ]
+  @spec generate_data_key_pair_without_plaintext(key_id :: binary) :: ExAws.Operation.JSON.t()
+  @spec generate_data_key_pair_without_plaintext(
+          key_id :: binary,
+          opts :: generate_data_key_without_plaintext_opts
+        ) :: ExAws.Operation.JSON.t()
+  def generate_data_key_pair_without_plaintext(key_id, opts \\ []) when is_list(opts) do
+    query_params =
+      opts
+      |> normalize_opts
+      |> Map.merge(%{
+        "Action" => "GenerateDataKeyPairWithoutPlaintext",
+        "Version" => @version,
+        "KeyId" => key_id,
+        "KeySpec" => opts[:key_spec] || "AES_256"
+      })
+
+    request(:generate_data_key_pair_without_plaintext, query_params)
+  end
+
   @doc "Generates an unpredictable byte string"
   @spec generate_random(number_of_bytes :: pos_integer) :: ExAws.Operation.JSON.t()
   def generate_random(number_of_bytes) when is_integer(number_of_bytes) do
